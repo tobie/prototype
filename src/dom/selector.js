@@ -135,6 +135,17 @@ var Selector = Class.create({
   },
   
   match: function(element) {
+    if (this.expression.include(',')) {
+      // If the expression includes a comma, it might be a union of several
+      // selectors. Split and check each one.
+      var expressions = Selector.split(this.expression);
+      if (expressions.length > 1) {
+        return expressions.any( function(expression) {
+          return new Selector(expression).match(element);
+        });
+      }
+    }
+    
     this.tokens = [];
 
     var e = this.expression, ps = Selector.patterns, as = Selector.assertions;
