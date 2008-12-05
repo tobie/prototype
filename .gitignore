@@ -1,3 +1,3 @@
 .DS_Store
+test/unit/tmp
 pkg
-test/unit/tmp/*
