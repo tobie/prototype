@@ -60,6 +60,9 @@
           && currentTarget.type === 'radio'))
             node = currentTarget;
     }
+    
+    // Some events don't have a target.
+    if (!node) return null;
 
     // Fix a Safari bug where a text node gets passed as the target of an
     // anchor click rather than the anchor itself.
@@ -174,7 +177,8 @@
   }
 
   function _getCacheForID(id) {
-    return Event.cache[id] = Event.cache[id] || { };
+    Event.cache[id] = Event.cache[id] || { };
+    return Event.cache[id];
   }
 
   function _getRespondersForEvent(id, eventName) {
@@ -332,7 +336,7 @@
   });
 
   // Export to the global scope.
-  if (window.Event) Object.extend(window.Event, Event)
+  if (window.Event) Object.extend(window.Event, Event);
   else window.Event = Event;
 })();
 
