@@ -123,13 +123,16 @@ namespace :caja do
   namespace :test do
     task :run => ['rake:test:run']
 
-    task :build => [:require, 'rake:test:clean', :dist] do 
-      builder = UnittestJS::CajaBuilder::SuiteBuilder.new({
+    task :build => [:require, 'rake:test:clean', :dist] do
+      options = {
         :input_dir          => PROTOTYPE_TEST_UNIT_DIR,
         :assets_dir         => PROTOTYPE_DIST_DIR,
         :whitelist_dir      => File.join(PROTOTYPE_TEST_DIR, 'unit', 'caja_whitelists'),
         :html_attrib_schema => 'html_attrib.json'
-      })
+      }
+      
+      options[:caja_dir] = ENV['CAJA_SRC_PATH'] if ENV['CAJA_SRC_PATH']
+      builder = UnittestJS::CajaBuilder::SuiteBuilder.new(options)
       selected_tests = (ENV['TESTS'] || '').split(',')
       builder.collect(*selected_tests)
       builder.render
