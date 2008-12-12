@@ -18,10 +18,12 @@ var Prototype = {
     XPath: !!document.evaluate,
     SelectorsAPI: !!document.querySelector,
     ElementExtensions: !!window.HTMLElement,
-    SpecificElementExtensions: 
-      document.createElement('div')['__proto__'] &&
-      document.createElement('div')['__proto__'] !== 
-        document.createElement('form')['__proto__']
+    SpecificElementExtensions: (function() {
+      var div = document.createElement('div');
+      var form = document.createElement('form');
+      return (div['__proto__'] && div['__proto__'] !== form['__proto__']) ||
+        (div.constructor && div.constructor === window.HTMLDivElement);
+    })()
   },
 
   ScriptFragment: '<script[^>]*>([\\S\\s]*?)<\/script>',
