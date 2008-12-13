@@ -193,4 +193,18 @@ If CAJA_SRC_PATH is not specified, "rake caja:test" defaults to its own copy of 
     end
     require lib
   end
+  
+  namespace :assets do
+    desc %[Refreshes caja assets. Useful when combined with "rake caja:test:build" as it avoids the lengthly process of cajoling the tests suite each time a change is made to Caja. You'll need ot provide it with your CAJA_SRC_PATH.' ]
+    task :refresh => ['caja:require'] do
+      options = {
+        :input_dir          => PROTOTYPE_TEST_UNIT_DIR,
+        :assets_dir         => PROTOTYPE_DIST_DIR
+      }
+      raise "Please define CAJA_SRC_PATH." unless ENV['CAJA_SRC_PATH']
+      options[:caja_dir] = ENV['CAJA_SRC_PATH']
+      builder = UnittestJS::CajaBuilder::SuiteBuilder.new(options)
+      builder.assets_handler.refresh
+    end
+  end
 end
