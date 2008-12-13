@@ -52,9 +52,31 @@ task :clean_package_source do
   rm_rf File.join(PROTOTYPE_PKG_DIR, "prototype-#{PROTOTYPE_VERSION}")
 end
 
+desc %[Builds the Prototype distribution, then builds and runs the Prototype test suite.
+The following options are available:
+  
+- BROWSERS: Lets you choose which browsers to run the tests on.
+  For example, to run the test suite on Internet Explorer and Chrome:
+      $ rake test BROWSERS=chrome,ie
+  Currently supported browsers are:
+      Internet Explorer       ie
+      Firefox                 firefox
+      Safari                  safari
+      Opera                   opera
+      Konqueror               konqueror
+      Chrome                  chrome
+  
+- TESTS: Lets you specify which tests you want to build and run.
+  For example, to run "array_test.js" and "hash_test.js":
+      $ rake test TESTS=array,hash
+  
+- TESTCASES: Lets you specify which testcase to run.
+  For example, to run test "testLastIndexOf" and "testIndexOf" of "array_test.js":
+      $ rake test TESTS=array TESTCASES=testLastIndexOf,testIndexOf
+]
 task :test => ['test:build', 'test:run']
 namespace :test do
-  desc 'Runs all the JavaScript unit tests and collects the results'
+  desc 'Runs the Prototype test suite. For available options, see "rake test".'
   task :run => [:require] do
     testcases        = ENV['TESTCASES']
     browsers_to_test = ENV['BROWSERS'] && ENV['BROWSERS'].split(',')
@@ -79,6 +101,7 @@ namespace :test do
     runner.run
   end
   
+  desc 'Builds the Prototype distribution and test suite. For available options, see "rake test".'
   task :build => [:clean, :dist] do
     builder = UnittestJS::Builder::SuiteBuilder.new({
       :input_dir  => PROTOTYPE_TEST_UNIT_DIR,
@@ -89,6 +112,7 @@ namespace :test do
     builder.render
   end
   
+  desc 'Empties the Prototype test suite directory.'
   task :clean => [:require] do
     UnittestJS::Builder.empty_dir!(PROTOTYPE_TMP_DIR)
   end
