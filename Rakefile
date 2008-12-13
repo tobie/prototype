@@ -142,11 +142,18 @@ task :clean_tmp do
 end
 
 namespace :caja do
+  desc %[Builds the Prototype distribution, then builds and runs the cajoled Prototype test suite.
+"rake caja:test" lets you specify the same set of options as "rake test" and the path to the Caja svn trunk.
+    $ rake caja:test CAJA_SRC_PATH=/path/to/svn/trunk
+If CAJA_SRC_PATH is not specified, "rake caja:test" defaults to its own copy of Caja which might be outdated.
+]
   task :test => ['test:build', 'test:run']
   
   namespace :test do
+    desc 'Runs the cajoled test suite. For available options, see "rake caja:test".'
     task :run => ['rake:test:run']
-
+    
+    desc 'Builds the Prototype distribution and cajoled test suite. For available options, see "rake caja:test".'
     task :build => [:require, 'rake:test:clean', :dist] do
       options = {
         :input_dir          => PROTOTYPE_TEST_UNIT_DIR,
