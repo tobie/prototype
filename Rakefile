@@ -97,8 +97,8 @@ namespace :test do
     lib = 'vendor/unittest_js/lib/unittest_js'
     unless File.exists?(lib)
       puts "\nYou'll need UnittestJS to run the tests. Just run:\n\n"
-      puts "  $ git submodule init"
-      puts "  $ git submodule update"
+      puts "  $ git submodule init vendor/unittest_js"
+      puts "  $ git submodule update vendor/unittest_js"
       puts "\nand you should be all set.\n\n"
     end
     require lib
@@ -142,8 +142,8 @@ namespace :caja do
     lib = 'vendor/caja_builder/lib/caja_builder'
     unless File.exists?(lib)
       puts "\nYou'll need UnittestJS to run the tests. Just run:\n\n"
-      puts "  $ git submodule init"
-      puts "  $ git submodule update"
+      puts "  $ git submodule init vendor/caja_builder"
+      puts "  $ git submodule update vendor/caja_builder"
       puts "\nand you should be all set.\n\n"
     end
     require lib
