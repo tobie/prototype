@@ -195,7 +195,12 @@ If CAJA_SRC_PATH is not specified, "rake caja:test" defaults to its own copy of 
   end
   
   namespace :assets do
-    desc %[Refreshes caja assets. Useful when combined with "rake caja:test:build" as it avoids the lengthly process of cajoling the tests suite each time a change is made to Caja. You'll need ot provide it with your CAJA_SRC_PATH.' ]
+    desc %[Refreshes caja assets.
+Useful when combined with "rake caja:test:run" as it avoids the lengthly process of cajoling the tests suite each time a change is made to Caja.
+You'll need to provide it with the Caja source path you are currently working from.
+    $ rake caja:test:assets:refresh CAJA_SRC_PATH=/path/to/svn/trunk
+    $ rake caja:test:run CAJA_SRC_PATH=/path/to/svn/trunk
+]
     task :refresh => ['caja:require'] do
       options = {
         :input_dir          => PROTOTYPE_TEST_UNIT_DIR,
