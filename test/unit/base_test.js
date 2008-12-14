@@ -187,7 +187,9 @@ new Test.Unit.Runner({
     this.assert(Object.isArray([0]));
     this.assert(Object.isArray([0, 1]));
     this.assert(!Object.isArray({}));
-    this.assert(!Object.isArray($('list').childNodes));
+    if (!Prototype.Browser.Caja) {
+      this.assert(!Object.isArray($('list').childNodes));
+    }
     this.assert(!Object.isArray());
     this.assert(!Object.isArray(''));
     this.assert(!Object.isArray('foo'));
@@ -293,7 +295,7 @@ new Test.Unit.Runner({
     // peEventFired will stop the PeriodicalExecuter after 3 callbacks
     new PeriodicalExecuter(peEventFired, 0.05);
     
-    this.wait(600, function() {
+    this.wait(1000, function() {
       this.assertEqual(3, peEventCount);
     });
   },
@@ -410,8 +412,14 @@ new Test.Unit.Runner({
 
     var Bird = Class.create(Animal);
     this.assertEqual(Bird, Animal.subclasses.last());
-    // for..in loop (for some reason) doesn't iterate over the constructor property in top-level classes
-    this.assertEnumEqual(Object.keys(new Animal).sort(), Object.keys(new Bird).without('constructor').sort());
+    
+    var birdKeys = Object.keys(new Bird);
+    if(!Prototype.Browser.Caja) {
+      // for..in loop (for some reason) doesn't iterate over the
+      // constructor property in top-level classes
+      birdKeys = birdKeys.without('constructor');
+    }
+    this.assertEnumEqual(Object.keys(new Animal).sort(), birdKeys.sort());
   },
 
   testClassInstantiation: function() { 
@@ -510,10 +518,15 @@ new Test.Unit.Runner({
   },
  
   testClassWithToStringAndValueOfMethods: function() {
-    var Foo = Class.create({
-      toString: function() { return "toString" },
-      valueOf: function() { return "valueOf" }
-    });
+    var methods = {
+      toString: function() { return "toString" }
+    };
+    
+    if (!Prototype.Browser.Caja) {
+      // workaround for avoiding static rejection when cajoling.
+      methods['valueOf'] = function() { return "valueOf" }
+    }
+    var Foo = Class.create(methods);
     
     var Parent = Class.create({
       m1: function(){ return 'm1' },
@@ -524,9 +537,10 @@ new Test.Unit.Runner({
       m2: function($super) { return 'm2 child' }
     });
     
-    this.assert(new Child().m1.toString().indexOf('m1 child') > -1);
-    
+    if (!Prototype.Browser.Caja) {
+      this.assert(new Child().m1.toString().indexOf('m1 child') > -1);
+      this.assertEqual("valueOf", new Foo().valueOf());
+    }
     this.assertEqual("toString", new Foo().toString());
-    this.assertEqual("valueOf", new Foo().valueOf());
   }
 });

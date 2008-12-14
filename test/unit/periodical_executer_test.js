@@ -8,7 +8,7 @@ new Test.Unit.Runner({
     // peEventFired will stop the PeriodicalExecuter after 3 callbacks
     new PeriodicalExecuter(peEventFired, 0.05);
 
-    this.wait(600, function() {
+    this.wait(1000, function() {
       this.assertEqual(3, peEventCount);
     });
   }
