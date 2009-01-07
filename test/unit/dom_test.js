@@ -28,11 +28,11 @@ new Test.Unit.Runner({
         'document.body.offsetHeight', 'document.body.offsetWidth',
         'document.body.offsetTop', 'document.body.offsetLeft'
       ].inject([], function(properties, prop) {
-        if(!self.screen && prop.include('self.screen')) return;
-        if (!document.body && prop.include('document.body')) return;
+        if (!self.screen && prop.include('self.screen')) return properties;
+        if (!document.body && prop.include('document.body')) return properties;
         properties.push(prop);
         if (prop.include('.body') && document.documentElement)
-          properties.push(prop.sub('.body', '.documentElement'));
+            properties.push(prop.sub('.body', '.documentElement'));
         return properties;
       }),
 
@@ -48,7 +48,7 @@ new Test.Unit.Runner({
 
   testDollarFunction: function() {
     this.assertUndefined($());
-    
+
     this.assertNull(document.getElementById('noWayThisIDExists'));
     this.assertNull($('noWayThisIDExists'));
     
@@ -61,7 +61,7 @@ new Test.Unit.Runner({
     this.assertRespondsTo('hide', elt);
     this.assertRespondsTo('childOf', elt);
   },
-  
+
   testGetElementsByClassName: function() {
     if (document.getElementsByClassName.toString().include('[native code]')) {
       this.info("browser uses native getElementsByClassName; skipping tests");
